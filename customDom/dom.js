@@ -12,3 +12,32 @@ export function createDom(fiber) {
 
     return dom
 }
+
+export function updateDom(dom, prevProps, nextProps) {
+    Object.keys(prevProps)
+        .filter(isProperty)
+        .forEach(name => {
+            if (!(name in nextProps)) {
+                if (isEvent(name)) {
+                    dom.removeEventListener(eventName(name), prevProps[name])
+                } else {
+                    dom[name] = ''
+                }
+            }
+        })
+
+    Object.keys(nextProps)
+        .filter(isProperty)
+        .forEach(name => {
+            if (prevProps[name] !== nextProps[name]) {
+                if (isEvent(name)) {
+                    if (prevProps[name]) {
+                        dom.removeEventListener(eventName(name), prevProps[name])
+                    }
+                    dom.addEventListener(eventName(name), nextProps[name])
+                } else {
+                    dom[name] = nextProps[name]
+                }
+            }
+        })
+}
