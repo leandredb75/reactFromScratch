@@ -14,7 +14,7 @@
 
 <body>
   <div id="root"></div>
-
+  <script src="testRouter.js"></script>
   <script type="text/babel">
 
     function useIncrement() {
@@ -53,6 +53,7 @@
 
     function InputInformation() {
       const [infos, information] = useMyInfos()
+      console.log(infos)
       return <div>
         {infos ? (
           <div>
@@ -102,7 +103,11 @@
       ReactDOM.render(element, document.getElementById("root"))
     }
 
-    step1()
+    if (window.location.pathname === '/esgi-react/') {
+      step1()
+      window.history.pushState({}, '', '/esgi-react')
+      console.log(window.history)
+    }
   </script>
 </body>
 
