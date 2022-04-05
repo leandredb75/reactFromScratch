@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>Document</title>
-  <!-- Note: when deploying, replace "development.js" with "production.min.js". -->
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
   <script src="didact.js" type="module"></script>
@@ -16,6 +15,95 @@
 <body>
   <div id="root"></div>
 
+  <script type="text/babel">
+
+    function useIncrement() {
+      const [n, setN] = React.useState(0)
+      const increment = function () {
+        setN(n + 1)
+      }
+      return [n, increment]
+    }
+
+    function useMyInfos() {
+      const [infos, setInfos] = React.useState({
+        name: '', prenom: '', age: ''
+      })
+      const information = function () {
+        const evName = document.getElementById('name').value;
+        const evPrenom = document.getElementById('prenom').value;
+        const evAge = document.getElementById('age').value;
+
+        setInfos({
+          name: evName, prenom: evPrenom, age: evAge
+        })
+        console.log(infos)
+
+      }
+      return [infos, information]
+    }
+
+    function Compteur({ name }) {
+      const [n, increment] = useIncrement()
+      return <div>
+        Compteur : {n}
+        <button onClick={() => increment()}>Incrémenter</button>
+      </div>
+    }
+
+    function InputInformation() {
+      const [infos, information] = useMyInfos()
+      return <div>
+        {infos ? (
+          <div>
+            <ul>
+              <li>Nom : {infos.name} </li>
+              <li>Prenom : {infos.prenom} </li>
+              <li>Age : {infos.age} </li>
+            </ul>
+          </div>
+        ) : ""}
+        <input type="text" name="name" id="name" placeholder="entrez votre nom" />
+        <input type="text" name="Prenom" id="prenom" placeholder="entrez votre prenom" />
+        <input type="number" name="Age" id="age" placeholder="entrez votre age" />
+        <button onClick={() => information()}>soumettre</button>
+      </div>
+    }
+
+    function Leandre({ name }) {
+      const [n, increment] = useIncrement()
+      return <div>
+        Hello {name}
+      </div>
+    }
+
+    /** Didact.createElement */
+    function step1() {
+      console.log('step1')
+      const element = (
+        <div id="foo">
+          <Leandre name="Leandre" />
+          <InputInformation />
+          <Compteur name="John" />
+          <button onclick={() => step2()}>En savoir plus !</button>
+        </div>
+      )
+      ReactDOM.render(element, document.getElementById("root"))
+    }
+
+    function step2() {
+      console.log('step2')
+      const element = (
+        <div id="foo">
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae exercitationem ipsum odio provident, quaerat quam. Culpa doloribus maiores odit qui, quisquam velit. Dicta praesentium, quasi. Ducimus nobis perferendis tempora.</p>
+          <button onclick={step1}>Retour</button>
+        </div>
+      )
+      ReactDOM.render(element, document.getElementById("root"))
+    }
+
+    step1()
+  </script>
 </body>
 
 </html>
